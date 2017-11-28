@@ -1,0 +1,16 @@
+version: "2"
+services:
+
+  apache:
+    image: httpd:2.4
+    container_name: metricbeat-apache
+    volumes:
+      - ./config/usr/local/apache2/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
+    networks:
+      - apache
+
+networks:
+  apache:
+    external:
+      name: metricbeat
+

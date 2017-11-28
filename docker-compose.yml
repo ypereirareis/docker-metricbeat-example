@@ -1,0 +1,60 @@
+version: "2.2"
+services:
+
+  ######################################################################################################################
+  # Elasticsearch / Kibana / Metricbeat to analyse
+  ######################################################################################################################
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.0
+    container_name: metricbeat-elasticsearch
+    memswap_limit: 0
+    mem_limit: 2g
+    cap_add:
+      - IPC_LOCK
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./config/usr/share/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    ports:
+      - "127.0.0.1:9222:9200"
+    networks:
+      - metricbeat
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.0.0
+    container_name: metricbeat-kibana
+    volumes:
+      - ./config/opt/kibana/config/kibana.yml:/opt/kibana/config/kibana.yml:ro
+    depends_on:
+      - elasticsearch
+    ports:
+      - "127.0.0.1:5666:5601"
+    networks:
+      - metricbeat
+
+  metricbeat:
+    build: ./docker/metricbeat
+    container_name: metricbeat-metricbeat
+    command: -system.hostfs=/hostfs
+    volumes:
+      - /proc:/hostfs/proc:ro
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      - /:/hostfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - elasticsearch
+    networks:
+      - metricbeat
+
+networks:
+  metricbeat:
+    external:
+      name: metricbeat
+
+

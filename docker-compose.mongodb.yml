@@ -1,0 +1,15 @@
+version: "2.2"
+services:
+
+  mongodb:
+    image: mongo
+    container_name: metricbeat-mongodb
+    networks:
+      - mongodb
+
+networks:
+  mongodb:
+    external:
+      name: metricbeat
+
+
