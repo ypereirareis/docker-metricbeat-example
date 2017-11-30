@@ -155,7 +155,7 @@ make stop-all
 
 * Compose file: [./docker-compose.apache.yml](./docker-compose.apache.yml)
 * Start: `make start-apache`
-* Stop: `make start-apache`
+* Stop: `make stop-apache`
 
 ```bash
 4f4cb6e72a39    httpd:2.4   "httpd-foreground"  11 minutes ago  Up About a minute   80/tcp  metricbeat-apache
@@ -165,7 +165,7 @@ make stop-all
 
 * Compose file: [./docker-compose.mongodb.yml](./docker-compose.mongodb.yml)
 * Start: `make start-mongodb`
-* Stop: `make start-mongodb`
+* Stop: `make stop-mongodb`
 
 ```bash
 a379163bc90d    mongo   "docker-entrypoint..."   11 minutes ago    Up About a minute   27017/tcp    metricbeat-mongodb
@@ -175,7 +175,7 @@ a379163bc90d    mongo   "docker-entrypoint..."   11 minutes ago    Up About a mi
 
 * Compose file: [./docker-compose.mysql.yml](./docker-compose.mysql.yml)
 * Start: `make start-mysql`
-* Stop: `make start-mysql`
+* Stop: `make stop-mysql`
 
 ```bash
 3ae8e0c7c1e3    mysql:8.0   "docker-entrypoint..."   11 minutes ago   Up About a minute   3306/tcp metricbeat-mysql
@@ -185,7 +185,7 @@ a379163bc90d    mongo   "docker-entrypoint..."   11 minutes ago    Up About a mi
 
 * Compose file: [./docker-compose.nginx.yml](./docker-compose.nginx.yml)
 * Start: `make start-nginx`
-* Stop: `make start-nginx`
+* Stop: `make stop-nginx`
 
 ```bash
 da1a01c36c4c    nginx:1.13.7-alpine "nginx -g 'daemon ..."   11 minutes ago   Up About a minute   80/tcp  metricbeat-nginx
@@ -195,7 +195,7 @@ da1a01c36c4c    nginx:1.13.7-alpine "nginx -g 'daemon ..."   11 minutes ago   Up
 
 * Compose file: [./docker-compose.rabbitmq.yml](./docker-compose.rabbitmq.yml)
 * Start: `make start-rabbitmq`
-* Stop: `make start-rabbitmq`
+* Stop: `make stop-rabbitmq`
 
 ```bash
 6c072660a008    bijukunjummen/rabbitmq-server:3.6.5 "/bin/sh -c /opt/r..."   14 minutes ago      Up 2 seconds   4369/tcp, 5672/tcp, 9100-9105/tcp, 25672/tcp, 127.0.0.1:1234->15672/tcp   metricbeat-rabbitmq
@@ -205,7 +205,7 @@ da1a01c36c4c    nginx:1.13.7-alpine "nginx -g 'daemon ..."   11 minutes ago   Up
 
 * Compose file: [./docker-compose.redis.yml](./docker-compose.redis.yml)
 * Start: `make start-redis`
-* Stop: `make start-redis`
+* Stop: `make stop-redis`
 
 ```bash
 52be9d662f8f    redis:3.2.11-alpine "docker-entrypoint..."   11 minutes ago Up About a minute   6379/tcp    metricbeat-redis
