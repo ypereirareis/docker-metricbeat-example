@@ -1,9 +1,8 @@
 version: "2.2"
 services:
 
-  ######################################################################################################################
-  # Elasticsearch / Kibana / Metricbeat to analyse
-  ######################################################################################################################
+  # Used as the Metricbeat output
+  # Of course, we could create a cluster with more nodes
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.0.0
     container_name: metricbeat-elasticsearch
@@ -22,10 +21,12 @@ services:
     volumes:
       - ./config/usr/share/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     ports:
-      - "127.0.0.1:9222:9200"
+      - "9222:9200"
     networks:
       - metricbeat
 
+  # Used to analyse data sent to elasticsearch from Metricbeat.
+  # Metricbeat directly creates Dashbords into Kibana
   kibana:
     image: docker.elastic.co/kibana/kibana:6.0.0
     container_name: metricbeat-kibana
@@ -34,23 +35,45 @@ services:
     depends_on:
       - elasticsearch
     ports:
-      - "127.0.0.1:5666:5601"
+      - "5666:5601"
     networks:
       - metricbeat
 
+  # Container to monitor services running inside other containers
   metricbeat:
     build: ./docker/metricbeat
-    container_name: metricbeat-metricbeat
+    container_name: metricbeat-metricbeat-services
+    command: -e
+    environment:
+      - "WAIT_FOR_HOSTS=elasticsearch:9200 kibana:5601"
+      - "HOST_ELASTICSEARCH=elasticsearch:9200"
+      - "HOST_KIBANA=kibana:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - metricbeat
+
+  # Specific container and configuration to monitor the HOST (filesystem, memory, processes,...)
+  metricbeat-host:
+    build:
+      context: ./docker/metricbeat
+      args:
+        - METRICBEAT_FILE=metricbeat-host.yml
+    container_name: metricbeat-metricbeat-host
     command: -system.hostfs=/hostfs
     volumes:
       - /proc:/hostfs/proc:ro
       - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
       - /:/hostfs:ro
       - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - elasticsearch
-    networks:
-      - metricbeat
+    environment:
+      - "WAIT_FOR_HOSTS=elasticsearch:9222 kibana:5666"
+      - "HOST_ELASTICSEARCH=elasticsearch:9222"
+      - "HOST_KIBANA=kibana:5666"
+    extra_hosts:
+      - "elasticsearch:172.17.0.1" # The IP of docker0 interface to access host from container
+      - "kibana:172.17.0.1" # The IP of docker0 interface to access host from container
+    network_mode: host # Mandatory to monitor HOST filesystem, memory, processes,...
 
 networks:
   metricbeat:

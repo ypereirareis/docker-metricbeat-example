@@ -1,5 +1,10 @@
 # =========================================== MONITORING ===============================================================
 
+# ----------------------- SETUP -------------------------------------------------------------------
+# Useful to configure a few things on the host machien to allow elasticsearch and metricbeat to work.
+setup:
+	@./scripts/setup.sh
+
 # ----------------------- KIBANA -------------------------------------------------------------------
 start-kibana:
 	@docker-compose up -d kibana
@@ -25,16 +30,22 @@ remove-network:
 	@docker network rm metricbeat
 
 start-monitoring: create-network start-elasticsearch start-kibana
-	@echo "Waiting for elasticsearch..."
-	@sleep 15
 	@docker-compose up -d metricbeat
 	@echo "================= Monitoring STARTED !!!"
 
-stop-monitoring: stop-metricbeat stop-kibana stop-elasticsearch
+stop-monitoring: stop-metricbeat
 	@docker-compose stop
 	@echo "================= Monitoring STOPPED !!!"
 
+stop-monitoring-host:
+	@docker-compose stop metricbeat-host
+	@docker-compose rm -f metricbeat-host || true
 
+start-monitoring-host: start-elasticsearch start-kibana
+	@docker-compose up -d metricbeat-host
+
+build:
+	@docker-compose build
 
 # =================================================== MYSQL ============================================================
 compose-mysql=docker-compose -f docker-compose.mysql.yml -p metricbeat_mysql
@@ -83,4 +94,8 @@ start-all: start-apache start-nginx start-redis start-rabbitmq start-mongodb sta
 
 stop-all: stop-apache stop-nginx stop-redis stop-rabbitmq stop-mongodb stop-mysql
 
+clean:
+	@./scripts/clean.sh
 
+
+install: clean setup start-monitoring-host start-monitoring start-all

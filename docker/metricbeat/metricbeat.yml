@@ -1,24 +1,8 @@
 metricbeat.modules:
 
-#------------------------------- System Module -------------------------------
-- module: system
-  metricsets: ["cpu", "load", "filesystem", "fsstat", "memory", "network", "process", "core", "diskio", "socket"]
-  period: 5s
-  enabled: true
-  processes: ['.*']
-
-  cpu.metrics:  ["percentages"]
-  core.metrics: ["percentages"]
-
-#------------------------------- Docker Module -------------------------------
-- module: docker
-  metricsets: ["container", "cpu", "diskio", "healthcheck", "info", "memory", "network"]
-  hosts: ["unix:///var/run/docker.sock"]
-  enabled: true
-  period: 5s
-
 #------------------------------- RabbitMQ Module -------------------------------
 - module: rabbitmq
+  enabled: true
   metricsets: ["node"]
   period: 5s
   hosts: ["rabbitmq:15672"]
@@ -27,7 +11,9 @@ metricbeat.modules:
 
 #------------------------------- MySQL Module -------------------------------
 - module: mysql
+  enabled: true
   metricsets: ["status"]
+  period: 5s
   hosts: ["tcp(mysql:3306)/"]
   username: root
   password: root
@@ -35,23 +21,28 @@ metricbeat.modules:
 #------------------------------- MongoDB Module -------------------------------
 
 - module: mongodb
+  enabled: true
   metricsets: ["status", "dbstats"]
+  period: 5s
   hosts: ["mongodb:27017"]
 
 #------------------------------- MongoDB Module -------------------------------
 - module: apache
+  enabled: true
   metricsets: ["status"]
   period: 5s
   hosts: ["http://apache"]
 
 #------------------------------- Redis Module -------------------------------
 - module: redis
+  enabled: true
   metricsets: ["info", "keyspace"]
   period: 5s
   hosts: ["redis:6379"]
 
 #------------------------------- Nginx Module -------------------------------
 - module: nginx
+  enabled: true
   metricsets: ["stubstatus"]
   period: 5s
   hosts: ["http://nginx"]
@@ -59,12 +50,12 @@ metricbeat.modules:
 
 #-------------------------- Elasticsearch output ------------------------------
 output.elasticsearch:
-  username: "elastic"
-  password: "changeme"
-  hosts: ["elasticsearch:9200"]
+  username: "metricbeat_anonymous_user"
+  #password: ""
+  hosts: ["${HOST_ELASTICSEARCH}"]
 
 setup.kibana:
-  host: "kibana:5601"
+  host: "${HOST_KIBANA}"
 
 #============================== Dashboards =====================================
 # These settings control loading the sample dashboards to the Kibana index. Loading
@@ -72,12 +63,11 @@ setup.kibana:
 # options here, or by using the `-setup` CLI flag.
 setup.dashboards.enabled: true
 
-
 logging.level: warning
 logging.to_files: true
 logging.to_syslog: false
 logging.files:
-  path: /var/log/mybeat
-  name: mybeat.log
-  keepfiles: 7
+  path: /var/log/metricbeat
+  name: metricbeat.log
+  keepfiles: 2
   permissions: 0644

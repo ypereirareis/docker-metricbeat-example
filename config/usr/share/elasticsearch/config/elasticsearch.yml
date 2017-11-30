@@ -6,3 +6,9 @@ network.host: 0.0.0.0
 # Details: https://github.com/elastic/elasticsearch/pull/17288
 discovery.zen.minimum_master_nodes: 1
 xpack.license.self_generated.type: basic
+
+xpack.security.authc:
+  anonymous:
+    username: metricbeat_anonymous_user
+    roles: superuser
+    authz_exception: true
