@@ -2,7 +2,7 @@ version: "2.2"
 services:
 
   mongodb:
-    image: mongo
+    image: mongo:3.5.13-jessie
     container_name: metricbeat-mongodb
     networks:
       - mongodb

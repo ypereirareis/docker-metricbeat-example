@@ -2,7 +2,7 @@ version: "2"
 services:
 
   apache:
-    image: httpd:2.4
+    image: httpd:2.4.29-alpine
     container_name: metricbeat-apache
     volumes:
       - ./config/usr/local/apache2/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf

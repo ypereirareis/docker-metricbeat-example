@@ -7,6 +7,23 @@ Learn how to use Docker and Metricbeat to monitor you host system, all your node
 > This project is built for example and testing.  
 > DO NOT use any part of it in production unless you know exactly what you are doing.
 
+## Software versions
+
+| Name  | Version |
+| ------------- | ------------- |
+| Docker  | 17.10.0-ce (f4ffd25) (Tue Oct 17 19:05:05 2017)  |
+| Docker-compose  | 1.17.0, build ac53b73 |
+| Elasticsearch  | 6.0.0 |
+| Metricbeat  | 6.0.0 |
+| Kibana  | 6.0.0 |
+| Apache | 2.4.29-alpine |
+| MongoDB | 3.5.13-jessie |
+| MySQL | 8.0 |
+| Nginx | 1.13.7-alpine |
+| RabbitMQ | 3.6.14-management-alpine |
+| Redis | 3.2.11-alpine |
+
+
 ## Install
 
 Clone the repository

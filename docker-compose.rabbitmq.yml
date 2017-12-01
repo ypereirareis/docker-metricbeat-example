@@ -2,7 +2,7 @@ version: "2.2"
 services:
 
   rabbitmq:
-    image: bijukunjummen/rabbitmq-server:3.6.5
+    image: rabbitmq:3.6.14-management-alpine
     container_name: metricbeat-rabbitmq
     environment:
       TCP_PORTS: "5672,15672"
